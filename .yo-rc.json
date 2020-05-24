@@ -14,8 +14,8 @@
     "cacheProvider": "no",
     "websocket": "spring-websocket",
     "databaseType": "sql",
-    "devDatabaseType": "mssql",
-    "prodDatabaseType": "mssql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
     "searchEngine": "elasticsearch",
     "messageBroker": "kafka",
     "serviceDiscoveryType": "eureka",
@@ -37,6 +37,7 @@
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": ["en"],
-    "blueprints": []
+    "blueprints": [],
+    "lastLiquibaseTimestamp": 1590341992000
   }
 }

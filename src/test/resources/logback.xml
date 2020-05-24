@@ -27,6 +27,7 @@
     <logger name="org.hibernate.validator" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <logger name="org.postgresql.jdbc" level="WARN"/>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
@@ -35,7 +36,6 @@
     <logger name="org.xnio" level="WARN"/>
     <logger name="kafka" level="WARN"/>
     <logger name="org.I0Itec" level="WARN"/>
-    <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
     <logger name="springfox" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/>
     <logger name="liquibase" level="WARN"/>

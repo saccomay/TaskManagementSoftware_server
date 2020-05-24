@@ -78,30 +78,28 @@
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
                                 tableName="jhi_user"/>
-        <ext:loadData
+        <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  identityInsertEnabled="true"
                   tableName="jhi_user">
+            <column name="id" type="numeric"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
-        </ext:loadData>
+        </loadData>
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
-        <ext:loadData
+        <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
-                  identityInsertEnabled="true"
                   tableName="jhi_authority">
             <column name="name" type="string"/>
-        </ext:loadData>
+        </loadData>
 
-        <ext:loadData
+        <loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  identityInsertEnabled="true"
                   tableName="jhi_user_authority">
             <column name="user_id" type="numeric"/>
-        </ext:loadData>
+        </loadData>
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" >
                 <constraints primaryKey="true" nullable="false"/>

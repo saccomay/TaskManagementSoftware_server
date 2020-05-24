@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="proposal">
+            <h2><span jhiTranslate="taskManagementSoftwareServerApp.proposal.detail.title">Proposal</span> {{ proposal.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="taskManagementSoftwareServerApp.proposal.content">Content</span></dt>
+                <dd>
+                    <span>{{ proposal.content }}</span>
+                </dd>
+                <dt><span jhiTranslate="taskManagementSoftwareServerApp.proposal.startDate">Start Date</span></dt>
+                <dd>
+                    <span>{{ proposal.startDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="taskManagementSoftwareServerApp.proposal.endDate">End Date</span></dt>
+                <dd>
+                    <span>{{ proposal.endDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="taskManagementSoftwareServerApp.proposal.status">Status</span></dt>
+                <dd>
+                    <span>{{ proposal.status }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/proposal', proposal.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
