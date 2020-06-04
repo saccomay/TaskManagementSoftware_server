@@ -58,7 +58,6 @@ public class UserExtraDTO implements Serializable {
         this.equiqmentGroupId = equiqmentGroupId;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

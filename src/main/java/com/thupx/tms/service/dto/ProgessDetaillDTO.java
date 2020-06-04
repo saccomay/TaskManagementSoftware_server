@@ -19,7 +19,20 @@ public class ProgessDetaillDTO implements Serializable {
 
     private Long progressId;
     
-    public Long getId() {
+    
+    
+    
+    public ProgessDetaillDTO() {
+		super();
+	}
+
+	public ProgessDetaillDTO(Long proposalId, Long progressId) {
+		super();
+		this.proposalId = proposalId;
+		this.progressId = progressId;
+	}
+
+	public Long getId() {
         return id;
     }
 

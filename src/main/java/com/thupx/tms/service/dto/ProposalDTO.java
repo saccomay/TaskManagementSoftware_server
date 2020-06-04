@@ -21,7 +21,22 @@ public class ProposalDTO implements Serializable {
 
     private Long hospitalDepartmentId;
     
-    public Long getId() {
+    
+    public ProposalDTO() {
+		super();
+	}
+
+	public ProposalDTO(String contentProposal, ZonedDateTime startDate, ZonedDateTime endDate, Boolean status,
+			Long hospitalDepartmentId) {
+		super();
+		this.contentProposal = contentProposal;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.status = status;
+		this.hospitalDepartmentId = hospitalDepartmentId;
+	}
+
+	public Long getId() {
         return id;
     }
 
