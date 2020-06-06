@@ -76,6 +76,13 @@ public class EquiqmentGroupServiceImpl implements EquiqmentGroupService {
         return equiqmentGroupRepository.findById(id)
             .map(equiqmentGroupMapper::toDto);
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<EquiqmentGroup> findOneById(Long id) {
+        log.debug("Request to get EquiqmentGroup : {}", id);
+        return equiqmentGroupRepository.findById(id);
+    }
 
     /**
      * Delete the equiqmentGroup by id.

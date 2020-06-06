@@ -23,7 +23,6 @@ public class UserExtra implements Serializable {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "id")
     private User user;
 
     @ManyToOne

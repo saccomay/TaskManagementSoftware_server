@@ -40,15 +40,18 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    
+    private final EquiqmentGroupService equiqmentGroupService;
 
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository,EquiqmentGroupService equiqmentGroupService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.equiqmentGroupService = equiqmentGroupService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -122,50 +125,50 @@ public class UserService {
         return newUser;
     }
     
-    public User registerUser(UserDTO userDTO, String password, String phone) {
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
-            boolean removed = removeNonActivatedUser(existingUser);
-            if (!removed) {
-                throw new UsernameAlreadyUsedException();
-            }
-        });
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
-            boolean removed = removeNonActivatedUser(existingUser);
-            if (!removed) {
-                throw new EmailAlreadyUsedException();
-            }
-        });
-        User newUser = new User();
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
-        // new user gets initially a generated password
-        newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        if (userDTO.getEmail() != null) {
-            newUser.setEmail(userDTO.getEmail().toLowerCase());
-        }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
-        newUser.setActivated(false);
-        // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
-        Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-        newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
-        log.debug("Created Information for User: {}", newUser);
-        
-        // Create and save the UserExtra entity
-        UserExtra newUserExtra = new UserExtra();
-        newUserExtra.setUser(newUser);
-        newUserExtra.setPhone(phone);
-        userExtraRepository.save(newUserExtra);
-        log.debug("Created Information for UserExtra: {}", newUserExtra);
-        
-        return newUser;
-    }
+//    public User registerUser(UserDTO userDTO, String password, String phone) {
+//        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+//            boolean removed = removeNonActivatedUser(existingUser);
+//            if (!removed) {
+//                throw new UsernameAlreadyUsedException();
+//            }
+//        });
+//        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+//            boolean removed = removeNonActivatedUser(existingUser);
+//            if (!removed) {
+//                throw new EmailAlreadyUsedException();
+//            }
+//        });
+//        User newUser = new User();
+//        String encryptedPassword = passwordEncoder.encode(password);
+//        newUser.setLogin(userDTO.getLogin().toLowerCase());
+//        // new user gets initially a generated password
+//        newUser.setPassword(encryptedPassword);
+//        newUser.setFirstName(userDTO.getFirstName());
+//        newUser.setLastName(userDTO.getLastName());
+//        if (userDTO.getEmail() != null) {
+//            newUser.setEmail(userDTO.getEmail().toLowerCase());
+//        }
+//        newUser.setImageUrl(userDTO.getImageUrl());
+//        newUser.setLangKey(userDTO.getLangKey());
+//        // new user is not active
+//        newUser.setActivated(false);
+//        // new user gets registration key
+//        newUser.setActivationKey(RandomUtil.generateActivationKey());
+//        Set<Authority> authorities = new HashSet<>();
+//        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+//        newUser.setAuthorities(authorities);
+//        userRepository.save(newUser);
+//        log.debug("Created Information for User: {}", newUser);
+//        
+//        // Create and save the UserExtra entity
+//        UserExtra newUserExtra = new UserExtra();
+//        newUserExtra.setUser(newUser);
+//        newUserExtra.setPhone(phone);
+//        userExtraRepository.save(newUserExtra);
+//        log.debug("Created Information for UserExtra: {}", newUserExtra);
+//        
+//        return newUser;
+//    }
 
     private boolean removeNonActivatedUser(User existingUser) {
         if (existingUser.getActivated()) {
@@ -205,6 +208,54 @@ public class UserService {
         }
         userRepository.save(user);
         log.debug("Created Information for User: {}", user);
+        return user;
+    }
+    
+    public User createUser(UserDTO userDTO, String phone, Long equiqmentGroupId) {
+        User user = new User();
+        user.setLogin(userDTO.getLogin().toLowerCase());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+        }
+        user.setImageUrl(userDTO.getImageUrl());
+        if (userDTO.getLangKey() == null) {
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        } else {
+            user.setLangKey(userDTO.getLangKey());
+        }
+        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        user.setPassword(encryptedPassword);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        user.setActivated(true);
+        if (userDTO.getAuthorities() != null) {
+            Set<Authority> authorities = userDTO.getAuthorities().stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
+        userRepository.save(user);
+        log.debug("Created Information for User: {}", user);
+        
+     // Create and save the UserExtra entity
+        UserExtra newUserExtra = new UserExtra();
+        newUserExtra.setUser(user);
+        log.debug("user: {}", user);
+        newUserExtra.setPhone(phone);
+        newUserExtra.setEquiqmentGroup(equiqmentGroupService.findOneById(equiqmentGroupId).get());
+        log.debug("Before: {}", newUserExtra.getUser());
+        log.debug("Before: {}", newUserExtra.getPhone());
+        log.debug("Before: {}", newUserExtra.getEquiqmentGroup());
+        log.debug(newUserExtra.toString());
+        userExtraRepository.save(newUserExtra);
+        log.debug("After", newUserExtra.toString());
+//        userExtraSearchRepository.save(newUserExtra);
+        log.debug("Created Information for UserExtra: {}", newUserExtra);
+        
         return user;
     }
 

@@ -15,6 +15,7 @@ public class ManagedUserVM extends UserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
     private String phone;
+    private Long equiqmentGroupId;
 
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
@@ -31,8 +32,21 @@ public class ManagedUserVM extends UserDTO {
     public String getPhone() {
         return phone;
     }
+    
 
-    // prettier-ignore
+    public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Long getEquiqmentGroupId() {
+		return equiqmentGroupId;
+	}
+
+	public void setEquiqmentGroupId(Long equiqmentGroupId) {
+		this.equiqmentGroupId = equiqmentGroupId;
+	}
+
+	// prettier-ignore
     @Override
     public String toString() {
         return "ManagedUserVM{" + super.toString() + "} ";

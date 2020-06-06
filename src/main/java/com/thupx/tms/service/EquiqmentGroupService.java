@@ -1,5 +1,6 @@
 package com.thupx.tms.service;
 
+import com.thupx.tms.domain.EquiqmentGroup;
 import com.thupx.tms.service.dto.EquiqmentGroupDTO;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public interface EquiqmentGroupService {
      * @return the entity.
      */
     Optional<EquiqmentGroupDTO> findOne(Long id);
+    
+    Optional<EquiqmentGroup> findOneById(Long id);
 
     /**
      * Delete the "id" equiqmentGroup.

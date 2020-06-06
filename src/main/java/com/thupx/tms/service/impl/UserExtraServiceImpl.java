@@ -53,6 +53,15 @@ public class UserExtraServiceImpl implements UserExtraService {
         userExtra = userExtraRepository.save(userExtra);
         return userExtraMapper.toDto(userExtra);
     }
+    
+    @Override
+    public UserExtra save2(UserExtra userExtra) {
+        log.debug("Request to save UserExtra : {}", userExtra);
+//        Long userId = userExtraDTO.getUserId();
+//        userRepository.findById(userId).ifPresent(userExtra::user);
+        userExtra = userExtraRepository.save(userExtra);
+        return userExtra;
+    }
 
     /**
      * Get all the userExtras.

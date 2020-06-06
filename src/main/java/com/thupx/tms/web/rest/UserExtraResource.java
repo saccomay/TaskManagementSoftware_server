@@ -1,5 +1,6 @@
 package com.thupx.tms.web.rest;
 
+import com.thupx.tms.domain.UserExtra;
 import com.thupx.tms.service.UserExtraService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.UserExtraDTO;
@@ -56,6 +57,21 @@ public class UserExtraResource {
         }
         UserExtraDTO result = userExtraService.save(userExtraDTO);
         return ResponseEntity.created(new URI("/api/user-extras/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+    
+    @PostMapping("/user-extras2")
+    public ResponseEntity<UserExtra> createUserExtra2(@RequestBody UserExtra userExtra) throws URISyntaxException {
+        log.debug("REST request to save UserExtra : {}", userExtra);
+        if (userExtra.getId() != null) {
+            throw new BadRequestAlertException("A new userExtra cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (Objects.isNull(userExtra.getId())) {
+            throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
+        }
+        UserExtra result = userExtraService.save2(userExtra);
+        return ResponseEntity.created(new URI("/api/user-extras2/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }

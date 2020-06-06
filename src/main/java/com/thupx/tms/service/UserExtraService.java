@@ -1,5 +1,6 @@
 package com.thupx.tms.service;
 
+import com.thupx.tms.domain.UserExtra;
 import com.thupx.tms.service.dto.UserExtraDTO;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface UserExtraService {
      * @return the persisted entity.
      */
     UserExtraDTO save(UserExtraDTO userExtraDTO);
+    
+    UserExtra save2(UserExtra userExtra);
 
     /**
      * Get all the userExtras.
