@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
 	
-	private UserExtraRepository userExtraRepository;
+	private final UserExtraRepository userExtraRepository;
 	
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -47,11 +47,13 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository,EquiqmentGroupService equiqmentGroupService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+    		AuthorityRepository authorityRepository,EquiqmentGroupService equiqmentGroupService, UserExtraRepository userExtraRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.equiqmentGroupService = equiqmentGroupService;
+        this.userExtraRepository = userExtraRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
