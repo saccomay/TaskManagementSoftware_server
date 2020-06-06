@@ -1,7 +1,15 @@
 package com.thupx.tms.web.rest;
 
+import com.thupx.tms.domain.ProgessDetaill;
+import com.thupx.tms.domain.Progress;
+import com.thupx.tms.domain.Proposal;
+import com.thupx.tms.domain.ProposalData;
+import com.thupx.tms.service.ProgressService;
 import com.thupx.tms.service.ProposalService;
+import com.thupx.tms.service.ProgessDetaillService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
+import com.thupx.tms.service.dto.ProgessDetaillDTO;
+import com.thupx.tms.service.dto.ProgressDTO;
 import com.thupx.tms.service.dto.ProposalDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -14,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +41,18 @@ public class ProposalResource {
     private String applicationName;
 
     private final ProposalService proposalService;
+    
+    private final ProgressService progressService;
+    
+    private final ProgessDetaillService progessDetaillService ;
+    
+    
+    
 
-    public ProposalResource(ProposalService proposalService) {
+    public ProposalResource(ProposalService proposalService, ProgressService progressService, ProgessDetaillService progessDetaillService) {
         this.proposalService = proposalService;
+        this.progressService = progressService;
+        this.progessDetaillService = progessDetaillService;
     }
 
     /**
@@ -51,6 +69,14 @@ public class ProposalResource {
             throw new BadRequestAlertException("A new proposal cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ProposalDTO result = proposalService.save(proposalDTO);
+        
+        List<ProgressDTO> progresses = progressService.findAll();
+        
+        for(ProgressDTO progressDTO : progresses) {
+        	ProgessDetaillDTO progessDetaillDTO = new ProgessDetaillDTO(result.getId(), progressDTO.getId());
+        	progessDetaillService.save(progessDetaillDTO);
+        }
+        
         return ResponseEntity.created(new URI("/api/proposals/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -84,8 +110,43 @@ public class ProposalResource {
      */
     @GetMapping("/proposals")
     public List<ProposalDTO> getAllProposals() {
-        log.debug("REST request to get all Proposals");
-        return proposalService.findAll();
+        log.debug("REST request to get all ProposalsDTO");
+        return proposalService.findAllDTO();
+    }
+    
+    public ProgessDetaill getCurrentProgessDetaill(Long idProposal) {
+        log.debug("REST request to get ProgessDetaill : {}", idProposal);
+        List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(idProposal);
+        
+        for(ProgessDetaill progessDetaill : progessDetaills) {
+        	if(progessDetaill.getEndDate() == null) {
+        		return progessDetaill;
+        	}
+        }        
+        return progessDetaills.get(progessDetaills.size() - 1);
+    }
+    
+    public ProgessDetaillDTO getCurrentProgessDetaillDTO(Long idProposal) {
+        log.debug("REST request to get current ProgessDetaillDTO : {}", idProposal);
+        List<ProgessDetaillDTO> progessDetaills = progessDetaillService.findAllDTOByProposalId(idProposal);
+        
+        for(ProgessDetaillDTO progessDetaill : progessDetaills) {
+        	if(progessDetaill.getEndDate() == null) {
+        		return progessDetaill;
+        	}
+        }        
+        return progessDetaills.get(progessDetaills.size() - 1);
+    }
+    
+    @GetMapping("/proposals-data-table")
+    public List<ProposalData> getAllProposalsDataTable() {
+        log.debug("REST request to get all Proposals-table");
+        List<Proposal> proposals = proposalService.findAll();
+        List<ProposalData> proposalDatas = new ArrayList<>();
+        for(Proposal proposal : proposals) {
+        	proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
+        }
+        return proposalDatas;
     }
 
     /**

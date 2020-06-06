@@ -55,10 +55,18 @@ public class ProposalServiceImpl implements ProposalService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ProposalDTO> findAll() {
-        log.debug("Request to get all Proposals");
+    public List<ProposalDTO> findAllDTO() {
+        log.debug("Request to get all ProposalsDTO");
         return proposalRepository.findAll().stream()
             .map(proposalMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Proposal> findAll() {
+        log.debug("Request to get all Proposals");
+        return proposalRepository.findAll().stream()
             .collect(Collectors.toCollection(LinkedList::new));
     }
 

@@ -1,5 +1,6 @@
 package com.thupx.tms.service;
 
+import com.thupx.tms.domain.Proposal;
 import com.thupx.tms.service.dto.ProposalDTO;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public interface ProposalService {
      *
      * @return the list of entities.
      */
-    List<ProposalDTO> findAll();
+    List<ProposalDTO> findAllDTO();
 
-
+    List<Proposal> findAll();
     /**
      * Get the "id" proposal.
      *

@@ -100,6 +100,7 @@ public class ProgressResource {
         Optional<ProgressDTO> progressDTO = progressService.findOne(id);
         return ResponseUtil.wrapOrNotFound(progressDTO);
     }
+    
 
     /**
      * {@code DELETE  /progresses/:id} : delete the "id" progress.

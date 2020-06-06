@@ -1,5 +1,6 @@
 package com.thupx.tms.web.rest;
 
+import com.thupx.tms.domain.ProgessDetaill;
 import com.thupx.tms.service.ProgessDetaillService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.ProgessDetaillDTO;
@@ -99,6 +100,19 @@ public class ProgessDetaillResource {
         log.debug("REST request to get ProgessDetaill : {}", id);
         Optional<ProgessDetaillDTO> progessDetaillDTO = progessDetaillService.findOne(id);
         return ResponseUtil.wrapOrNotFound(progessDetaillDTO);
+    }
+    
+    @GetMapping("/progess-detaills/getCurrentProgessDetaill")
+    public ProgessDetaill getCurrentProgessDetaill(@RequestParam Long idProposal) {
+        log.debug("REST request to get ProgessDetaill : {}", idProposal);
+        List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(idProposal);
+        
+        for(ProgessDetaill progessDetaill : progessDetaills) {
+        	if(progessDetaill.getEndDate() == null) {
+        		return progessDetaill;
+        	}
+        }        
+        return progessDetaills.get(progessDetaills.size() - 1);
     }
 
     /**

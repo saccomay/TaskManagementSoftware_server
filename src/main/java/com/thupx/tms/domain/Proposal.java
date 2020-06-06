@@ -16,7 +16,7 @@ public class Proposal implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
@@ -40,8 +40,9 @@ public class Proposal implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = "proposals", allowSetters = true)
     private UserExtra userExtra;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    
+    
+	// jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }

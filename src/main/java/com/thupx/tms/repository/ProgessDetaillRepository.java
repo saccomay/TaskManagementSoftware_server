@@ -2,6 +2,8 @@ package com.thupx.tms.repository;
 
 import com.thupx.tms.domain.ProgessDetaill;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ProgessDetaillRepository extends JpaRepository<ProgessDetaill, Long> {
+	
+	List<ProgessDetaill> findAllByProposalId(Long id);
 }

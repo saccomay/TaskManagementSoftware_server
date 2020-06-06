@@ -1,5 +1,6 @@
 package com.thupx.tms.service;
 
+import com.thupx.tms.domain.ProgessDetaill;
 import com.thupx.tms.service.dto.ProgessDetaillDTO;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public interface ProgessDetaillService {
      * @return the list of entities.
      */
     List<ProgessDetaillDTO> findAll();
+    
+    List<ProgessDetaill> findAllByProposalId(Long id);
+    
+    List<ProgessDetaillDTO> findAllDTOByProposalId(Long id);
 
 
     /**

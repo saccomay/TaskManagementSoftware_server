@@ -18,10 +18,10 @@ public class ProposalDTO implements Serializable {
 
     private Boolean status;
 
-
     private Long hospitalDepartmentId;
 
     private Long userExtraId;
+    
     
     public Long getId() {
         return id;
