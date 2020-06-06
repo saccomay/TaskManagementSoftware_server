@@ -61,11 +61,6 @@ public class ProposalServiceImpl implements ProposalService {
             .map(proposalMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
-    
-    public List<Proposal> findAllProposals() {
-        log.debug("Request to get all Proposals");
-        return proposalRepository.findAll();
-    }
 
 
     /**

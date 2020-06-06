@@ -37,6 +37,10 @@ public class Proposal implements Serializable {
     @JsonIgnoreProperties(value = "proposals", allowSetters = true)
     private HospitalDepartment hospitalDepartment;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = "proposals", allowSetters = true)
+    private UserExtra userExtra;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -109,6 +113,19 @@ public class Proposal implements Serializable {
 
     public void setHospitalDepartment(HospitalDepartment hospitalDepartment) {
         this.hospitalDepartment = hospitalDepartment;
+    }
+
+    public UserExtra getUserExtra() {
+        return userExtra;
+    }
+
+    public Proposal userExtra(UserExtra userExtra) {
+        this.userExtra = userExtra;
+        return this;
+    }
+
+    public void setUserExtra(UserExtra userExtra) {
+        this.userExtra = userExtra;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

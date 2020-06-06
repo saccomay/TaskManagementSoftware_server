@@ -20,23 +20,10 @@ public class ProposalDTO implements Serializable {
 
 
     private Long hospitalDepartmentId;
-    
-    
-    public ProposalDTO() {
-		super();
-	}
 
-	public ProposalDTO(String contentProposal, ZonedDateTime startDate, ZonedDateTime endDate, Boolean status,
-			Long hospitalDepartmentId) {
-		super();
-		this.contentProposal = contentProposal;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.status = status;
-		this.hospitalDepartmentId = hospitalDepartmentId;
-	}
-
-	public Long getId() {
+    private Long userExtraId;
+    
+    public Long getId() {
         return id;
     }
 
@@ -84,6 +71,14 @@ public class ProposalDTO implements Serializable {
         this.hospitalDepartmentId = hospitalDepartmentId;
     }
 
+    public Long getUserExtraId() {
+        return userExtraId;
+    }
+
+    public void setUserExtraId(Long userExtraId) {
+        this.userExtraId = userExtraId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -111,6 +106,7 @@ public class ProposalDTO implements Serializable {
             ", endDate='" + getEndDate() + "'" +
             ", status='" + isStatus() + "'" +
             ", hospitalDepartmentId=" + getHospitalDepartmentId() +
+            ", userExtraId=" + getUserExtraId() +
             "}";
     }
 }

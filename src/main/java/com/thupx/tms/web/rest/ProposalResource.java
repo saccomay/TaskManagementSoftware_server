@@ -1,13 +1,8 @@
 package com.thupx.tms.web.rest;
 
 import com.thupx.tms.service.ProposalService;
-import com.thupx.tms.domain.Proposal;
-import com.thupx.tms.service.ProgessDetaillService;
-import com.thupx.tms.service.ProgressService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.ProposalDTO;
-import com.thupx.tms.service.dto.ProgessDetaillDTO;
-import com.thupx.tms.service.dto.ProgressDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -37,13 +32,9 @@ public class ProposalResource {
     private String applicationName;
 
     private final ProposalService proposalService;
-    private final ProgessDetaillService detaillService ;
-    private final ProgressService progressService;
 
-    public ProposalResource(ProposalService proposalService, ProgessDetaillService detaillService, ProgressService progressService) {
+    public ProposalResource(ProposalService proposalService) {
         this.proposalService = proposalService;
-        this.detaillService  = detaillService;
-        this.progressService = progressService;
     }
 
     /**
@@ -60,13 +51,6 @@ public class ProposalResource {
             throw new BadRequestAlertException("A new proposal cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ProposalDTO result = proposalService.save(proposalDTO);
-        
-        // create 7 progress detail       
-        List<ProgressDTO> progressDTOList = progressService.findAll();
-        for(ProgressDTO progressDTO : progressDTOList) {
-        	detaillService.save(new ProgessDetaillDTO(result.getId(),progressDTO.getId()));
-        }
-        
         return ResponseEntity.created(new URI("/api/proposals/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -102,12 +86,6 @@ public class ProposalResource {
     public List<ProposalDTO> getAllProposals() {
         log.debug("REST request to get all Proposals");
         return proposalService.findAll();
-    }
-    
-    @GetMapping("/proposals-list")
-    public List<Proposal> getProposalsList() {
-        log.debug("REST request to get all Proposals");
-        return proposalService.findAllProposals();
     }
 
     /**

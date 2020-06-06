@@ -14,5 +14,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="hospital_department"/>
 
+        <addForeignKeyConstraint baseColumnNames="user_extra_id"
+                                 baseTableName="proposal"
+                                 constraintName="fk_proposal_user_extra_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_extra"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -8,6 +8,13 @@
       "relationshipType": "many-to-one",
       "otherEntityField": "id",
       "otherEntityRelationshipName": "proposal"
+    },
+    {
+      "relationshipName": "userExtra",
+      "otherEntityName": "userExtra",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "proposal"
     }
   ],
   "fields": [
