@@ -5,6 +5,8 @@ import com.thupx.tms.domain.Progress;
 import com.thupx.tms.domain.ProgressStage;
 import com.thupx.tms.domain.Proposal;
 import com.thupx.tms.domain.ProposalData;
+import com.thupx.tms.domain.UserExtra;
+import com.thupx.tms.repository.UserExtraRepository;
 import com.thupx.tms.service.ProgressService;
 import com.thupx.tms.service.ProposalService;
 import com.thupx.tms.service.UserService;
@@ -49,13 +51,16 @@ public class ProposalResource {
 	private final ProgessDetaillService progessDetaillService;
 
 	private final UserService userService;
+	
+	private final UserExtraRepository extraRepository;
 
 	public ProposalResource(ProposalService proposalService, ProgressService progressService,
-			ProgessDetaillService progessDetaillService, UserService userService) {
+			ProgessDetaillService progessDetaillService, UserService userService, UserExtraRepository extraRepository) {
 		this.proposalService = proposalService;
 		this.progressService = progressService;
 		this.progessDetaillService = progessDetaillService;
 		this.userService = userService;
+		this.extraRepository = extraRepository;
 	}
 
 	/**
@@ -152,13 +157,46 @@ public class ProposalResource {
 		log.debug("REST request to get all Proposals-table");
 		List<Proposal> proposals = proposalService.findAll();
 		List<ProposalData> proposalDatas = new ArrayList<>();
-		//if (userService.checkAdmin() == 0) {
+		
+		int group = userService.checkAdmin();
+		
+		log.debug("grouppppppppppppppppppppppp: {}", group);
+		
+		// super admin
+		if (group == 0) {
 			for (Proposal proposal : proposals) {
 				proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
 			}
 			return proposalDatas;
-		//}
-		//return proposalDatas;
+		}
+		
+		
+		// to truong
+		if (group != -1) {
+			List<UserExtra> userExtras = extraRepository.findAllByEquiqmentGroupId(Long.valueOf(group));			
+			for (Proposal proposal : proposals) {
+				for(UserExtra userExtra : userExtras) {
+					if(proposal.getUserExtra().getId().equals(userExtra.getId())) {
+						proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
+					}
+				}
+				
+			}
+			log.debug("totruong: {}", group);
+			return proposalDatas;
+		}
+		
+		// thanh vien
+		log.debug("totruong: {}", group);
+		UserExtra extra = extraRepository.findById(userService.checkUserEquimentGroup()).get();
+		log.debug("extra: {}", extra);
+		for (Proposal proposal : proposals) {
+				if(proposal.getUserExtra().getId().equals(extra.getId())) {
+					proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
+				}						
+		}
+		
+		return proposalDatas;
 	}
 
 	@GetMapping("/get-All-ProgressDetail-By-ProposalId")

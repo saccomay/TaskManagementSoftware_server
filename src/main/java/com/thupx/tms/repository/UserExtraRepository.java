@@ -2,6 +2,8 @@ package com.thupx.tms.repository;
 
 import com.thupx.tms.domain.UserExtra;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface UserExtraRepository extends JpaRepository<UserExtra, Long> {
+	
+	List<UserExtra> findAllByEquiqmentGroupId(Long id);
 }

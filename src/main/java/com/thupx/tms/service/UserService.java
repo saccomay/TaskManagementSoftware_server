@@ -368,12 +368,20 @@ public class UserService {
     public int checkAdmin() {
     	User user = getUserWithAuthorities().get();
     	Set<Authority> authorities = user.getAuthorities();
-    	log.debug(authorities.toArray().toString());
-    	if (!authorities.contains(AuthoritiesConstants.ADMIN)) {
+    	log.debug("autho {}",authorities.toString());
+    	if (authorities.size() != 2) { 
 			return -1;
 		}
     	UserExtra extra =  userExtraRepository.findById(user.getId()).get();
+    	log.debug("userextra: {}",extra);
     	return extra.getEquiqmentGroup().getId().intValue();
+    }
+    
+    public Long checkUserEquimentGroup() {
+    	User user = getUserWithAuthorities().get();
+    	UserExtra extra =  userExtraRepository.findById(user.getId()).get();
+    	log.debug("userextra: {}",extra);
+    	return extra.getEquiqmentGroup().getId();
     }
 
     /**
