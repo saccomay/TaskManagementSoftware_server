@@ -5,6 +5,7 @@ import com.thupx.tms.domain.Progress;
 import com.thupx.tms.domain.ProgressStage;
 import com.thupx.tms.domain.Proposal;
 import com.thupx.tms.domain.ProposalData;
+import com.thupx.tms.domain.ProposalData2;
 import com.thupx.tms.domain.UserExtra;
 import com.thupx.tms.repository.UserExtraRepository;
 import com.thupx.tms.service.ProgressService;
@@ -160,20 +161,22 @@ public class ProposalResource {
 		return progessDetaills.get(progessDetaills.size() - 1);
 	}
 
+
 	@GetMapping("/proposals-data-table")
-	public List<ProposalData> getAllProposalsDataTable() {
+	public List<ProposalData2> getAllProposalsDataTable() {
 		log.debug("REST request to get all Proposals-table");
 		List<Proposal> proposals = proposalService.findAll();
-		List<ProposalData> proposalDatas = new ArrayList<>();
+		List<ProposalData2> proposalDatas = new ArrayList<>();
 		
 		int group = userService.checkAdmin();
 		
-		log.debug("grouppppppppppppppppppppppp: {}", group);
+		log.debug("groupppppppppppppppppppppp: {}", group);
 		
 		// super admin
 		if (group == 0) {
 			for (Proposal proposal : proposals) {
-				proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
+				ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
+				proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask()));
 			}
 			return proposalDatas;
 		}
@@ -185,7 +188,8 @@ public class ProposalResource {
 			for (Proposal proposal : proposals) {
 				for(UserExtra userExtra : userExtras) {
 					if(proposal.getUserExtra().getId().equals(userExtra.getId())) {
-						proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
+						ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
+						proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask()));
 					}
 				}
 				
@@ -200,7 +204,8 @@ public class ProposalResource {
 		log.debug("extra: {}", extra);
 		for (Proposal proposal : proposals) {
 				if(proposal.getUserExtra().getId().equals(extra.getId())) {
-					proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
+					ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
+					proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask()));
 				}						
 		}
 		
