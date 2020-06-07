@@ -2,10 +2,12 @@ package com.thupx.tms.web.rest;
 
 import com.thupx.tms.domain.ProgessDetaill;
 import com.thupx.tms.domain.Progress;
+import com.thupx.tms.domain.ProgressStage;
 import com.thupx.tms.domain.Proposal;
 import com.thupx.tms.domain.ProposalData;
 import com.thupx.tms.service.ProgressService;
 import com.thupx.tms.service.ProposalService;
+import com.thupx.tms.service.UserService;
 import com.thupx.tms.service.ProgessDetaillService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.ProgessDetaillDTO;
@@ -33,146 +35,173 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class ProposalResource {
 
-    private final Logger log = LoggerFactory.getLogger(ProposalResource.class);
+	private final Logger log = LoggerFactory.getLogger(ProposalResource.class);
 
-    private static final String ENTITY_NAME = "proposal";
+	private static final String ENTITY_NAME = "proposal";
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+	@Value("${jhipster.clientApp.name}")
+	private String applicationName;
 
-    private final ProposalService proposalService;
-    
-    private final ProgressService progressService;
-    
-    private final ProgessDetaillService progessDetaillService ;
-    
-    
-    
+	private final ProposalService proposalService;
 
-    public ProposalResource(ProposalService proposalService, ProgressService progressService, ProgessDetaillService progessDetaillService) {
-        this.proposalService = proposalService;
-        this.progressService = progressService;
-        this.progessDetaillService = progessDetaillService;
-    }
+	private final ProgressService progressService;
 
-    /**
-     * {@code POST  /proposals} : Create a new proposal.
-     *
-     * @param proposalDTO the proposalDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new proposalDTO, or with status {@code 400 (Bad Request)} if the proposal has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PostMapping("/proposals")
-    public ResponseEntity<ProposalDTO> createProposal(@RequestBody ProposalDTO proposalDTO) throws URISyntaxException {
-        log.debug("REST request to save Proposal : {}", proposalDTO);
-        if (proposalDTO.getId() != null) {
-            throw new BadRequestAlertException("A new proposal cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        ProposalDTO result = proposalService.save(proposalDTO);
-        
-        List<ProgressDTO> progresses = progressService.findAll();
-        
-        for(ProgressDTO progressDTO : progresses) {
-        	ProgessDetaillDTO progessDetaillDTO = new ProgessDetaillDTO(result.getId(), progressDTO.getId());
-        	progessDetaillService.save(progessDetaillDTO);
-        }
-        
-        return ResponseEntity.created(new URI("/api/proposals/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
+	private final ProgessDetaillService progessDetaillService;
 
-    /**
-     * {@code PUT  /proposals} : Updates an existing proposal.
-     *
-     * @param proposalDTO the proposalDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated proposalDTO,
-     * or with status {@code 400 (Bad Request)} if the proposalDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the proposalDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/proposals")
-    public ResponseEntity<ProposalDTO> updateProposal(@RequestBody ProposalDTO proposalDTO) throws URISyntaxException {
-        log.debug("REST request to update Proposal : {}", proposalDTO);
-        if (proposalDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        ProposalDTO result = proposalService.save(proposalDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, proposalDTO.getId().toString()))
-            .body(result);
-    }
+	private final UserService userService;
 
-    /**
-     * {@code GET  /proposals} : get all the proposals.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of proposals in body.
-     */
-    @GetMapping("/proposals")
-    public List<ProposalDTO> getAllProposals() {
-        log.debug("REST request to get all ProposalsDTO");
-        return proposalService.findAllDTO();
-    }
-    
-    public ProgessDetaill getCurrentProgessDetaill(Long idProposal) {
-        log.debug("REST request to get ProgessDetaill : {}", idProposal);
-        List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(idProposal);
-        
-        for(ProgessDetaill progessDetaill : progessDetaills) {
-        	if(progessDetaill.getEndDate() == null) {
-        		return progessDetaill;
-        	}
-        }        
-        return progessDetaills.get(progessDetaills.size() - 1);
-    }
-    
-    public ProgessDetaillDTO getCurrentProgessDetaillDTO(Long idProposal) {
-        log.debug("REST request to get current ProgessDetaillDTO : {}", idProposal);
-        List<ProgessDetaillDTO> progessDetaills = progessDetaillService.findAllDTOByProposalId(idProposal);
-        
-        for(ProgessDetaillDTO progessDetaill : progessDetaills) {
-        	if(progessDetaill.getEndDate() == null) {
-        		return progessDetaill;
-        	}
-        }        
-        return progessDetaills.get(progessDetaills.size() - 1);
-    }
-    
-    @GetMapping("/proposals-data-table")
-    public List<ProposalData> getAllProposalsDataTable() {
-        log.debug("REST request to get all Proposals-table");
-        List<Proposal> proposals = proposalService.findAll();
-        List<ProposalData> proposalDatas = new ArrayList<>();
-        for(Proposal proposal : proposals) {
-        	proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
-        }
-        return proposalDatas;
-    }
+	public ProposalResource(ProposalService proposalService, ProgressService progressService,
+			ProgessDetaillService progessDetaillService, UserService userService) {
+		this.proposalService = proposalService;
+		this.progressService = progressService;
+		this.progessDetaillService = progessDetaillService;
+		this.userService = userService;
+	}
 
-    /**
-     * {@code GET  /proposals/:id} : get the "id" proposal.
-     *
-     * @param id the id of the proposalDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the proposalDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/proposals/{id}")
-    public ResponseEntity<ProposalDTO> getProposal(@PathVariable Long id) {
-        log.debug("REST request to get Proposal : {}", id);
-        Optional<ProposalDTO> proposalDTO = proposalService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(proposalDTO);
-    }
+	/**
+	 * {@code POST  /proposals} : Create a new proposal.
+	 *
+	 * @param proposalDTO the proposalDTO to create.
+	 * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+	 *         body the new proposalDTO, or with status {@code 400 (Bad Request)} if
+	 *         the proposal has already an ID.
+	 * @throws URISyntaxException if the Location URI syntax is incorrect.
+	 */
+	@PostMapping("/proposals")
+	public ResponseEntity<ProposalDTO> createProposal(@RequestBody ProposalDTO proposalDTO) throws URISyntaxException {
+		log.debug("REST request to save Proposal : {}", proposalDTO);
+		if (proposalDTO.getId() != null) {
+			throw new BadRequestAlertException("A new proposal cannot already have an ID", ENTITY_NAME, "idexists");
+		}
+		ProposalDTO result = proposalService.save(proposalDTO);
 
-    /**
-     * {@code DELETE  /proposals/:id} : delete the "id" proposal.
-     *
-     * @param id the id of the proposalDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/proposals/{id}")
-    public ResponseEntity<Void> deleteProposal(@PathVariable Long id) {
-        log.debug("REST request to delete Proposal : {}", id);
+		List<ProgressDTO> progresses = progressService.findAll();
 
-        proposalService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
+		for (ProgressDTO progressDTO : progresses) {
+			ProgessDetaillDTO progessDetaillDTO = new ProgessDetaillDTO(result.getId(), progressDTO.getId());
+			progessDetaillService.save(progessDetaillDTO);
+		}
+
+		return ResponseEntity
+				.created(new URI("/api/proposals/" + result.getId())).headers(HeaderUtil
+						.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+				.body(result);
+	}
+
+	/**
+	 * {@code PUT  /proposals} : Updates an existing proposal.
+	 *
+	 * @param proposalDTO the proposalDTO to update.
+	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+	 *         the updated proposalDTO, or with status {@code 400 (Bad Request)} if
+	 *         the proposalDTO is not valid, or with status
+	 *         {@code 500 (Internal Server Error)} if the proposalDTO couldn't be
+	 *         updated.
+	 * @throws URISyntaxException if the Location URI syntax is incorrect.
+	 */
+	@PutMapping("/proposals")
+	public ResponseEntity<ProposalDTO> updateProposal(@RequestBody ProposalDTO proposalDTO) throws URISyntaxException {
+		log.debug("REST request to update Proposal : {}", proposalDTO);
+		if (proposalDTO.getId() == null) {
+			throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+		}
+		ProposalDTO result = proposalService.save(proposalDTO);
+		return ResponseEntity.ok().headers(
+				HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, proposalDTO.getId().toString()))
+				.body(result);
+	}
+
+	/**
+	 * {@code GET  /proposals} : get all the proposals.
+	 *
+	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+	 *         of proposals in body.
+	 */
+	@GetMapping("/proposals")
+	public List<ProposalDTO> getAllProposals() {
+		log.debug("REST request to get all ProposalsDTO");
+		return proposalService.findAllDTO();
+	}
+
+	public ProgessDetaill getCurrentProgessDetaill(Long idProposal) {
+		log.debug("REST request to get ProgessDetaill : {}", idProposal);
+		List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(idProposal);
+
+		for (ProgessDetaill progessDetaill : progessDetaills) {
+			if (progessDetaill.getEndDate() == null) {
+				return progessDetaill;
+			}
+		}
+		return progessDetaills.get(progessDetaills.size() - 1);
+	}
+
+	public ProgessDetaillDTO getCurrentProgessDetaillDTO(Long idProposal) {
+		log.debug("REST request to get current ProgessDetaillDTO : {}", idProposal);
+		List<ProgessDetaillDTO> progessDetaills = progessDetaillService.findAllDTOByProposalId(idProposal);
+
+		for (ProgessDetaillDTO progessDetaill : progessDetaills) {
+			if (progessDetaill.getEndDate() == null) {
+				return progessDetaill;
+			}
+		}
+		return progessDetaills.get(progessDetaills.size() - 1);
+	}
+
+	@GetMapping("/proposals-data-table")
+	public List<ProposalData> getAllProposalsDataTable() {
+		log.debug("REST request to get all Proposals-table");
+		List<Proposal> proposals = proposalService.findAll();
+		List<ProposalData> proposalDatas = new ArrayList<>();
+		//if (userService.checkAdmin() == 0) {
+			for (Proposal proposal : proposals) {
+				proposalDatas.add(new ProposalData(proposal, getCurrentProgessDetaillDTO(proposal.getId())));
+			}
+			return proposalDatas;
+		//}
+		//return proposalDatas;
+	}
+
+	@GetMapping("/get-All-ProgressDetail-By-ProposalId")
+	public List<ProgressStage> getAllProgressDetailByProposalId(@RequestParam Long id) {
+		log.debug("REST request to get-All-ProgressDetail-By-ProposalId");
+		List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(id);
+		
+		List<ProgressStage> progressStages = new ArrayList<>();
+		
+		for(ProgessDetaill progessDetaill : progessDetaills) {
+			progressStages.add(new ProgressStage(progessDetaill.getId(), progessDetaill.getEndDate(), progessDetaill.getLastModifiedBy(), progessDetaill.getProgress()));
+		}
+		
+		return progressStages;
+	}
+
+	/**
+	 * {@code GET  /proposals/:id} : get the "id" proposal.
+	 *
+	 * @param id the id of the proposalDTO to retrieve.
+	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+	 *         the proposalDTO, or with status {@code 404 (Not Found)}.
+	 */
+	@GetMapping("/proposals/{id}")
+	public ResponseEntity<ProposalDTO> getProposal(@PathVariable Long id) {
+		log.debug("REST request to get Proposal : {}", id);
+		Optional<ProposalDTO> proposalDTO = proposalService.findOne(id);
+		return ResponseUtil.wrapOrNotFound(proposalDTO);
+	}
+
+	/**
+	 * {@code DELETE  /proposals/:id} : delete the "id" proposal.
+	 *
+	 * @param id the id of the proposalDTO to delete.
+	 * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+	 */
+	@DeleteMapping("/proposals/{id}")
+	public ResponseEntity<Void> deleteProposal(@PathVariable Long id) {
+		log.debug("REST request to delete Proposal : {}", id);
+
+		proposalService.delete(id);
+		return ResponseEntity.noContent()
+				.headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+				.build();
+	}
 }

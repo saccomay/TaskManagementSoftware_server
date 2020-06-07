@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
  */
 @Entity
 @Table(name = "progess_detaill")
-public class ProgessDetaill implements Serializable {
+public class ProgessDetaill extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
