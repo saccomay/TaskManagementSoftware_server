@@ -86,7 +86,7 @@ public class ProgessDetaillResource {
 //            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
 //        }
 //        ZonedDateTime dateTime = ZonedDateTime.now();
-//        progessDetaillService.setDoneProgress(dateTime, idProgressDetail);
+//        progessDetaillService.setDoneProgress(dateTime, idProgressDetail); 
 //        ProgessDetaillDTO result = progessDetaillService.findOne(idProgressDetail).get();
 //        return ResponseEntity.ok()
 //                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

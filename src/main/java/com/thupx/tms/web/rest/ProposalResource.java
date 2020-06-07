@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +79,13 @@ public class ProposalResource {
 		if (proposalDTO.getId() != null) {
 			throw new BadRequestAlertException("A new proposal cannot already have an ID", ENTITY_NAME, "idexists");
 		}
+		
+		ZonedDateTime time = ZonedDateTime.now();
+		
+		proposalDTO.setStartDate(time);
+		proposalDTO.setStatus(false);
+	    proposalDTO.setUserExtraId(userService.getUserid());
+		
 		ProposalDTO result = proposalService.save(proposalDTO);
 
 		List<ProgressDTO> progresses = progressService.findAll();

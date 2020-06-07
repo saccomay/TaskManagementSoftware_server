@@ -377,6 +377,11 @@ public class UserService {
     	return extra.getEquiqmentGroup().getId().intValue();
     }
     
+    public Long getUserid() {
+    	User user = getUserWithAuthorities().get();
+    	return user.getId();
+    }
+    
     public Long checkUserEquimentGroup() {
     	User user = getUserWithAuthorities().get();
     	UserExtra extra =  userExtraRepository.findById(user.getId()).get();
@@ -407,5 +412,5 @@ public class UserService {
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
-
+ 
 }

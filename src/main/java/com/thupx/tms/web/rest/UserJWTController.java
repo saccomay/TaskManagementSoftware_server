@@ -46,6 +46,8 @@ public class UserJWTController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        
+        
     }
     /**
      * Object to return as body in JWT Authentication.
