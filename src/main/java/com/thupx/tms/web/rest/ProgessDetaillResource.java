@@ -79,18 +79,33 @@ public class ProgessDetaillResource {
             .body(result);
     }
     
-    @PutMapping("/progess-detaills-stage")
-    public ResponseEntity<ProgessDetaillDTO> updateProgessDetaillStage(@RequestParam Long idProgressDetail) throws URISyntaxException {
+//    @PutMapping("/progess-detaills-stage")
+//    public ResponseEntity<ProgessDetaillDTO> updateProgessDetaillStage(@RequestParam Long idProgressDetail) throws URISyntaxException {
+//        log.debug("REST request to update ProgessDetaill id : {}", idProgressDetail);
+//        if (idProgressDetail == null) {
+//            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+//        }
+//        ZonedDateTime dateTime = ZonedDateTime.now();
+//        progessDetaillService.setDoneProgress(dateTime, idProgressDetail);
+//        ProgessDetaillDTO result = progessDetaillService.findOne(idProgressDetail).get();
+//        return ResponseEntity.ok()
+//                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+//                .body(result);
+//    }
+    
+    @PutMapping("/progess-detaill-stage")
+    public ResponseEntity<ProgessDetaillDTO> updateProgessDetaillStage2(@RequestParam Long idProgressDetail) throws URISyntaxException {
         log.debug("REST request to update ProgessDetaill id : {}", idProgressDetail);
         if (idProgressDetail == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        ProgessDetaillDTO progessDetaillDTO = progessDetaillService.findOne(idProgressDetail).get();      
         ZonedDateTime dateTime = ZonedDateTime.now();
-        progessDetaillService.setDoneProgress(dateTime, idProgressDetail);
-        ProgessDetaillDTO result = progessDetaillService.findOne(idProgressDetail).get();
+        progessDetaillDTO.setEndDate(dateTime);
+        ProgessDetaillDTO result = progessDetaillService.save(progessDetaillDTO);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-                .body(result);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, progessDetaillDTO.getId().toString()))
+            .body(result);
     }
 
 
