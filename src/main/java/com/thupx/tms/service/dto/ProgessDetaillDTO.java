@@ -1,6 +1,9 @@
 package com.thupx.tms.service.dto;
 
 import java.time.ZonedDateTime;
+
+import com.thupx.tms.domain.AbstractAuditingEntity;
+
 import java.io.Serializable;
 
 /**

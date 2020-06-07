@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,6 +78,21 @@ public class ProgessDetaillResource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, progessDetaillDTO.getId().toString()))
             .body(result);
     }
+    
+    @PutMapping("/progess-detaills-stage")
+    public ResponseEntity<ProgessDetaillDTO> updateProgessDetaillStage(@RequestParam Long idProgressDetail) throws URISyntaxException {
+        log.debug("REST request to update ProgessDetaill id : {}", idProgressDetail);
+        if (idProgressDetail == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        ZonedDateTime dateTime = ZonedDateTime.now();
+        progessDetaillService.setDoneProgress(dateTime, idProgressDetail);
+        ProgessDetaillDTO result = progessDetaillService.findOne(idProgressDetail).get();
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+    }
+
 
     /**
      * {@code GET  /progess-detaills} : get all the progessDetaills.

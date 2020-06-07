@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +78,12 @@ public class ProgessDetaillServiceImpl implements ProgessDetaillService {
         return progessDetaillRepository.findAllByProposalId(proposalId).stream()
         	.map(progessDetaillMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    @Override
+    public int setDoneProgress(ZonedDateTime endDate, Long id) {
+        log.debug("set done progress");
+        return progessDetaillRepository.setDoneProgress(endDate, id);
     }
 
 

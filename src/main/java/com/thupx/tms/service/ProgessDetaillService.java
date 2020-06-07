@@ -3,6 +3,7 @@ package com.thupx.tms.service;
 import com.thupx.tms.domain.ProgessDetaill;
 import com.thupx.tms.service.dto.ProgessDetaillDTO;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public interface ProgessDetaillService {
     List<ProgessDetaill> findAllByProposalId(Long id);
     
     List<ProgessDetaillDTO> findAllDTOByProposalId(Long id);
+    
+    int setDoneProgress(ZonedDateTime endDate, Long id); 
 
 
     /**
