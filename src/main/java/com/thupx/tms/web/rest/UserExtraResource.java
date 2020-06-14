@@ -103,9 +103,15 @@ public class UserExtraResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userExtras in body.
      */
     @GetMapping("/user-extras")
-    public List<UserExtraDTO> getAllUserExtras() {
+    public List<UserExtraDTO> getAllUserExtrasDTO() {
         log.debug("REST request to get all UserExtras");
         return userExtraService.findAll();
+    }
+    
+    @GetMapping("/user-extras-all")
+    public List<UserExtra> getAllUserExtras() {
+        log.debug("REST request to get all UserExtras");
+        return userExtraService.findAll2();
     }
 
     /**

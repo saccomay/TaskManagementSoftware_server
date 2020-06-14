@@ -27,7 +27,8 @@ public interface UserExtraService {
      * @return the list of entities.
      */
     List<UserExtraDTO> findAll();
-
+    
+    List<UserExtra> findAll2();
 
     /**
      * Get the "id" userExtra.

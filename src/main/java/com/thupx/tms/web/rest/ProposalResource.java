@@ -249,6 +249,12 @@ public class ProposalResource {
 	@DeleteMapping("/proposals/{id}")
 	public ResponseEntity<Void> deleteProposal(@PathVariable Long id) {
 		log.debug("REST request to delete Proposal : {}", id);
+		
+		List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(id);
+		
+		for(ProgessDetaill detaill : progessDetaills) {
+			progessDetaillService.delete(detaill.getId());
+		}
 
 		proposalService.delete(id);
 		return ResponseEntity.noContent()

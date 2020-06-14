@@ -76,6 +76,14 @@ public class UserExtraServiceImpl implements UserExtraService {
             .map(userExtraMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserExtra> findAll2() {
+        log.debug("Request to get all UserExtras");
+        return userExtraRepository.findAll().stream()
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
 
     /**
