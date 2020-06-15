@@ -5,8 +5,10 @@ import com.thupx.tms.domain.User;
 import com.thupx.tms.repository.UserRepository;
 import com.thupx.tms.security.AuthoritiesConstants;
 import com.thupx.tms.service.MailService;
+import com.thupx.tms.service.UserExtraService;
 import com.thupx.tms.service.UserService;
 import com.thupx.tms.service.dto.UserDTO;
+import com.thupx.tms.service.dto.UserExtraDTO;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.web.rest.errors.EmailAlreadyUsedException;
 import com.thupx.tms.web.rest.errors.LoginAlreadyUsedException;
@@ -66,15 +68,18 @@ public class UserResource {
     private String applicationName;
 
     private final UserService userService;
+    
+    private final UserExtraService extraService;
 
     private final UserRepository userRepository;
 
     private final MailService mailService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserExtraService extraService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.extraService = extraService;
     }
 
     /**
@@ -91,7 +96,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO, @RequestParam String phone, Long idGroup) throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -103,6 +108,13 @@ public class UserResource {
             throw new EmailAlreadyUsedException();
         } else {
             User newUser = userService.createUser(userDTO);
+            UserExtraDTO extraDTO = new UserExtraDTO();
+            extraDTO.setId(newUser.getId());
+            extraDTO.setEquiqmentGroupId(idGroup);
+            extraDTO.setPhone(phone);
+            extraDTO.setUserId(newUser.getId());
+            extraDTO.setUserLogin(newUser.getLogin());
+            extraService.save(extraDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName,  "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
