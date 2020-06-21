@@ -1,9 +1,6 @@
 package com.thupx.tms.service.dto;
 
 import java.time.ZonedDateTime;
-
-import com.thupx.tms.domain.AbstractAuditingEntity;
-
 import java.io.Serializable;
 
 /**
@@ -17,11 +14,12 @@ public class ProgessDetaillDTO implements Serializable {
 
     private ZonedDateTime endDate;
 
+    private String note;
+
 
     private Long proposalId;
 
     private Long progressId;
-    
     
     
     
@@ -57,6 +55,14 @@ public class ProgessDetaillDTO implements Serializable {
 
     public void setEndDate(ZonedDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Long getProposalId() {
@@ -99,6 +105,7 @@ public class ProgessDetaillDTO implements Serializable {
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", note='" + getNote() + "'" +
             ", proposalId=" + getProposalId() +
             ", progressId=" + getProgressId() +
             "}";

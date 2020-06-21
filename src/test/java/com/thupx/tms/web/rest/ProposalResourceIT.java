@@ -49,6 +49,9 @@ public class ProposalResourceIT {
     private static final Boolean DEFAULT_STATUS = false;
     private static final Boolean UPDATED_STATUS = true;
 
+    private static final String DEFAULT_NOTE = "AAAAAAAAAA";
+    private static final String UPDATED_NOTE = "BBBBBBBBBB";
+
     @Autowired
     private ProposalRepository proposalRepository;
 
@@ -77,7 +80,8 @@ public class ProposalResourceIT {
             .contentProposal(DEFAULT_CONTENT_PROPOSAL)
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .note(DEFAULT_NOTE);
         return proposal;
     }
     /**
@@ -91,7 +95,8 @@ public class ProposalResourceIT {
             .contentProposal(UPDATED_CONTENT_PROPOSAL)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .note(UPDATED_NOTE);
         return proposal;
     }
 
@@ -119,6 +124,7 @@ public class ProposalResourceIT {
         assertThat(testProposal.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testProposal.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testProposal.isStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testProposal.getNote()).isEqualTo(DEFAULT_NOTE);
     }
 
     @Test
@@ -156,7 +162,8 @@ public class ProposalResourceIT {
             .andExpect(jsonPath("$.[*].contentProposal").value(hasItem(DEFAULT_CONTENT_PROPOSAL)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(sameInstant(DEFAULT_END_DATE))))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
+            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE)));
     }
     
     @Test
@@ -173,7 +180,8 @@ public class ProposalResourceIT {
             .andExpect(jsonPath("$.contentProposal").value(DEFAULT_CONTENT_PROPOSAL))
             .andExpect(jsonPath("$.startDate").value(sameInstant(DEFAULT_START_DATE)))
             .andExpect(jsonPath("$.endDate").value(sameInstant(DEFAULT_END_DATE)))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
+            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE));
     }
     @Test
     @Transactional
@@ -199,7 +207,8 @@ public class ProposalResourceIT {
             .contentProposal(UPDATED_CONTENT_PROPOSAL)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .note(UPDATED_NOTE);
         ProposalDTO proposalDTO = proposalMapper.toDto(updatedProposal);
 
         restProposalMockMvc.perform(put("/api/proposals")
@@ -215,6 +224,7 @@ public class ProposalResourceIT {
         assertThat(testProposal.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testProposal.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testProposal.isStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testProposal.getNote()).isEqualTo(UPDATED_NOTE);
     }
 
     @Test

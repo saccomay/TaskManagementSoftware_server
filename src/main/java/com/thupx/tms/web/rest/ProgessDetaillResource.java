@@ -1,6 +1,5 @@
 package com.thupx.tms.web.rest;
 
-import com.thupx.tms.domain.ProgessDetaill;
 import com.thupx.tms.service.ProgessDetaillService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.ProgessDetaillDTO;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,36 +76,6 @@ public class ProgessDetaillResource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, progessDetaillDTO.getId().toString()))
             .body(result);
     }
-    
-//    @PutMapping("/progess-detaills-stage")
-//    public ResponseEntity<ProgessDetaillDTO> updateProgessDetaillStage(@RequestParam Long idProgressDetail) throws URISyntaxException {
-//        log.debug("REST request to update ProgessDetaill id : {}", idProgressDetail);
-//        if (idProgressDetail == null) {
-//            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-//        }
-//        ZonedDateTime dateTime = ZonedDateTime.now();
-//        progessDetaillService.setDoneProgress(dateTime, idProgressDetail); 
-//        ProgessDetaillDTO result = progessDetaillService.findOne(idProgressDetail).get();
-//        return ResponseEntity.ok()
-//                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-//                .body(result);
-//    }
-    
-    @PutMapping("/progess-detaill-stage")
-    public ResponseEntity<ProgessDetaillDTO> updateProgessDetaillStage2(@RequestParam Long idProgressDetail) throws URISyntaxException {
-        log.debug("REST request to update ProgessDetaill id : {}", idProgressDetail);
-        if (idProgressDetail == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        ProgessDetaillDTO progessDetaillDTO = progessDetaillService.findOne(idProgressDetail).get();      
-        ZonedDateTime dateTime = ZonedDateTime.now();
-        progessDetaillDTO.setEndDate(dateTime);
-        ProgessDetaillDTO result = progessDetaillService.save(progessDetaillDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, progessDetaillDTO.getId().toString()))
-            .body(result);
-    }
-
 
     /**
      * {@code GET  /progess-detaills} : get all the progessDetaills.
@@ -131,19 +99,6 @@ public class ProgessDetaillResource {
         log.debug("REST request to get ProgessDetaill : {}", id);
         Optional<ProgessDetaillDTO> progessDetaillDTO = progessDetaillService.findOne(id);
         return ResponseUtil.wrapOrNotFound(progessDetaillDTO);
-    }
-    
-    @GetMapping("/progess-detaills/getCurrentProgessDetaill")
-    public ProgessDetaill getCurrentProgessDetaill(@RequestParam Long idProposal) {
-        log.debug("REST request to get ProgessDetaill : {}", idProposal);
-        List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(idProposal);
-        
-        for(ProgessDetaill progessDetaill : progessDetaills) {
-        	if(progessDetaill.getEndDate() == null) {
-        		return progessDetaill;
-        	}
-        }        
-        return progessDetaills.get(progessDetaills.size() - 1);
     }
 
     /**

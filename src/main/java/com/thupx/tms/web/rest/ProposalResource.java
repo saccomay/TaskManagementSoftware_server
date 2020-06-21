@@ -83,9 +83,10 @@ public class ProposalResource {
 		
 		ZonedDateTime time = ZonedDateTime.now();
 		
-		proposalDTO.setStartDate(time);
+		//proposalDTO.setStartDate(time);
 		proposalDTO.setStatus(false);
 	    proposalDTO.setUserExtraId(userService.getUserid());
+	    
 		
 		ProposalDTO result = proposalService.save(proposalDTO);
 
@@ -200,7 +201,7 @@ public class ProposalResource {
 		
 		// thanh vien
 		log.debug("totruong: {}", group);
-		UserExtra extra = extraRepository.findById(userService.checkUserEquimentGroup()).get();
+		UserExtra extra = extraRepository.findById(userService.getUserid()).get();
 		log.debug("extra: {}", extra);
 		for (Proposal proposal : proposals) {
 				if(proposal.getUserExtra().getId().equals(extra.getId())) {
@@ -219,9 +220,20 @@ public class ProposalResource {
 		
 		List<ProgressStage> progressStages = new ArrayList<>();
 		
+		
+		Progress startProgress = new Progress();
+		startProgress.setContentTask("Tạo mới");
+		progressStages.add(new ProgressStage(Long.valueOf(0), null, null, null, startProgress));
+		
 		for(ProgessDetaill progessDetaill : progessDetaills) {
-			progressStages.add(new ProgressStage(progessDetaill.getId(), progessDetaill.getEndDate(), progessDetaill.getLastModifiedBy(), progessDetaill.getProgress()));
+			progressStages.add(new ProgressStage(progessDetaill.getId(), progessDetaill.getStartDate(), progessDetaill.getEndDate(), progessDetaill.getLastModifiedBy(), progessDetaill.getProgress()));
 		}
+		
+		Progress completeProgress = new Progress();
+		completeProgress.setContentTask("Hoàn thành");
+		
+		
+		progressStages.add(new ProgressStage(Long.valueOf(8), null, proposalService.findOne(id).get().getEndDate(), null, completeProgress));
 		
 		return progressStages;
 	}

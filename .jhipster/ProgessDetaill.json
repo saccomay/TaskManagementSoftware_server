@@ -25,6 +25,10 @@
     {
       "fieldName": "endDate",
       "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20200531150743",

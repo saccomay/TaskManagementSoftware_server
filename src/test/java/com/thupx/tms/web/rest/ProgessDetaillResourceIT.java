@@ -43,6 +43,9 @@ public class ProgessDetaillResourceIT {
     private static final ZonedDateTime DEFAULT_END_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_END_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
+    private static final String DEFAULT_NOTE = "AAAAAAAAAA";
+    private static final String UPDATED_NOTE = "BBBBBBBBBB";
+
     @Autowired
     private ProgessDetaillRepository progessDetaillRepository;
 
@@ -69,7 +72,8 @@ public class ProgessDetaillResourceIT {
     public static ProgessDetaill createEntity(EntityManager em) {
         ProgessDetaill progessDetaill = new ProgessDetaill()
             .startDate(DEFAULT_START_DATE)
-            .endDate(DEFAULT_END_DATE);
+            .endDate(DEFAULT_END_DATE)
+            .note(DEFAULT_NOTE);
         return progessDetaill;
     }
     /**
@@ -81,7 +85,8 @@ public class ProgessDetaillResourceIT {
     public static ProgessDetaill createUpdatedEntity(EntityManager em) {
         ProgessDetaill progessDetaill = new ProgessDetaill()
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .note(UPDATED_NOTE);
         return progessDetaill;
     }
 
@@ -107,6 +112,7 @@ public class ProgessDetaillResourceIT {
         ProgessDetaill testProgessDetaill = progessDetaillList.get(progessDetaillList.size() - 1);
         assertThat(testProgessDetaill.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testProgessDetaill.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testProgessDetaill.getNote()).isEqualTo(DEFAULT_NOTE);
     }
 
     @Test
@@ -142,7 +148,8 @@ public class ProgessDetaillResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(progessDetaill.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(sameInstant(DEFAULT_END_DATE))));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(sameInstant(DEFAULT_END_DATE))))
+            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE)));
     }
     
     @Test
@@ -157,7 +164,8 @@ public class ProgessDetaillResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(progessDetaill.getId().intValue()))
             .andExpect(jsonPath("$.startDate").value(sameInstant(DEFAULT_START_DATE)))
-            .andExpect(jsonPath("$.endDate").value(sameInstant(DEFAULT_END_DATE)));
+            .andExpect(jsonPath("$.endDate").value(sameInstant(DEFAULT_END_DATE)))
+            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE));
     }
     @Test
     @Transactional
@@ -181,7 +189,8 @@ public class ProgessDetaillResourceIT {
         em.detach(updatedProgessDetaill);
         updatedProgessDetaill
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .note(UPDATED_NOTE);
         ProgessDetaillDTO progessDetaillDTO = progessDetaillMapper.toDto(updatedProgessDetaill);
 
         restProgessDetaillMockMvc.perform(put("/api/progess-detaills")
@@ -195,6 +204,7 @@ public class ProgessDetaillResourceIT {
         ProgessDetaill testProgessDetaill = progessDetaillList.get(progessDetaillList.size() - 1);
         assertThat(testProgessDetaill.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testProgessDetaill.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testProgessDetaill.getNote()).isEqualTo(UPDATED_NOTE);
     }
 
     @Test

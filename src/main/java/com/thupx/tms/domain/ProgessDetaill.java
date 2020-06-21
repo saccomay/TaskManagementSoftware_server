@@ -27,6 +27,9 @@ public class ProgessDetaill extends AbstractAuditingEntity implements Serializab
     @Column(name = "end_date")
     private ZonedDateTime endDate;
 
+    @Column(name = "note")
+    private String note;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "progessDetaills", allowSetters = true)
     private Proposal proposal;
@@ -68,6 +71,19 @@ public class ProgessDetaill extends AbstractAuditingEntity implements Serializab
 
     public void setEndDate(ZonedDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public ProgessDetaill note(String note) {
+        this.note = note;
+        return this;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Proposal getProposal() {
@@ -120,6 +136,7 @@ public class ProgessDetaill extends AbstractAuditingEntity implements Serializab
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", note='" + getNote() + "'" +
             "}";
     }
 }

@@ -16,7 +16,7 @@ public class Proposal implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
@@ -33,6 +33,9 @@ public class Proposal implements Serializable {
     @Column(name = "status")
     private Boolean status;
 
+    @Column(name = "note")
+    private String note;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "proposals", allowSetters = true)
     private HospitalDepartment hospitalDepartment;
@@ -40,9 +43,8 @@ public class Proposal implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = "proposals", allowSetters = true)
     private UserExtra userExtra;
-    
-    
-	// jhipster-needle-entity-add-field - JHipster will add fields here
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -103,6 +105,19 @@ public class Proposal implements Serializable {
         this.status = status;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public Proposal note(String note) {
+        this.note = note;
+        return this;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     public HospitalDepartment getHospitalDepartment() {
         return hospitalDepartment;
     }
@@ -155,6 +170,7 @@ public class Proposal implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             ", status='" + isStatus() + "'" +
+            ", note='" + getNote() + "'" +
             "}";
     }
 }

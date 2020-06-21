@@ -33,6 +33,10 @@
     {
       "fieldName": "status",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
     }
   ],
   "changelogDate": "20200531120122",

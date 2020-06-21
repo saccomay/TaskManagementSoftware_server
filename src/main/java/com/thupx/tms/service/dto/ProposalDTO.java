@@ -18,10 +18,12 @@ public class ProposalDTO implements Serializable {
 
     private Boolean status;
 
+    private String note;
+
+
     private Long hospitalDepartmentId;
 
     private Long userExtraId;
-    
     
     public Long getId() {
         return id;
@@ -61,6 +63,14 @@ public class ProposalDTO implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Long getHospitalDepartmentId() {
@@ -105,6 +115,7 @@ public class ProposalDTO implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             ", status='" + isStatus() + "'" +
+            ", note='" + getNote() + "'" +
             ", hospitalDepartmentId=" + getHospitalDepartmentId() +
             ", userExtraId=" + getUserExtraId() +
             "}";
