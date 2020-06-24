@@ -152,7 +152,7 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.requestPasswordReset(mail);
-        if (user.isPresent()) {
+        if (!user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist

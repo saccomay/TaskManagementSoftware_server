@@ -17,6 +17,7 @@ public class ProgressStage implements Serializable {
 		this.performBy = performBy;
 		this.progress = progress;
 	}
+	
 	public Long getId() {
 		return id;
 	}
