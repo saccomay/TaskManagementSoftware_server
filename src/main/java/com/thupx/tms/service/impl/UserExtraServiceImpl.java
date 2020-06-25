@@ -81,8 +81,10 @@ public class UserExtraServiceImpl implements UserExtraService {
     @Transactional(readOnly = true)
     public List<UserExtra> findAll2() {
         log.debug("Request to get all UserExtras");
-        return userExtraRepository.findAll().stream()
-            .collect(Collectors.toCollection(LinkedList::new));
+        
+        List<UserExtra> extras = userExtraRepository.findAll();
+        log.debug("roleeeeeeeeeeeeeee {}",extras.get(0).getUser().getAuthorities().toString());
+        return userExtraRepository.findAll();
     }
 
 

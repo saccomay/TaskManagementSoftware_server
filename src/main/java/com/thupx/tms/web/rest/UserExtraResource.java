@@ -1,6 +1,7 @@
 package com.thupx.tms.web.rest;
 
 import com.thupx.tms.domain.UserExtra;
+import com.thupx.tms.domain.UserFull;
 import com.thupx.tms.service.UserExtraService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.UserExtraDTO;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -109,9 +111,16 @@ public class UserExtraResource {
     }
     
     @GetMapping("/user-extras-all")
-    public List<UserExtra> getAllUserExtras() {
+    public List<UserFull> getAllUserExtras() {
         log.debug("REST request to get all UserExtras");
-        return userExtraService.findAll2();
+        
+        List<UserExtra> extras = userExtraService.findAll2();
+        List<UserFull> userFulls = new ArrayList<>();
+                
+        for(UserExtra extra : extras) {
+        	userFulls.add(new UserFull(extra, new ArrayList<>(extra.getUser().getAuthorities())));
+        }
+        return userFulls;
     }
 
     /**
