@@ -30,10 +30,13 @@
             <column name="note" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="additional_day" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="hospital_department_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="user_extra_user_id" type="bigint">
+            <column name="user_extra_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -66,6 +69,7 @@
             <column name="end_date" type="datetime"/>
             <column name="status" type="boolean"/>
             <column name="note" type="string"/>
+            <column name="additional_day" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
