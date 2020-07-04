@@ -9,13 +9,15 @@ public class ProgressStage implements Serializable {
 	private ZonedDateTime timeEnd;
 	private String performBy;
 	private Progress progress;
-	public ProgressStage(Long id, ZonedDateTime timeStart, ZonedDateTime timeEnd, String performBy, Progress progress) {
+	private String note;
+	public ProgressStage(Long id, ZonedDateTime timeStart, ZonedDateTime timeEnd, String performBy, Progress progress, String note) {
 		super();
 		this.id = id;
 		this.timeStart = timeStart;
 		this.timeEnd = timeEnd;
 		this.performBy = performBy;
 		this.progress = progress;
+		this.note = note;
 	}
 	
 	public Long getId() {
@@ -49,7 +51,14 @@ public class ProgressStage implements Serializable {
 	public void setTimeEnd(ZonedDateTime timeEnd) {
 		this.timeEnd = timeEnd;
 	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
 	
+		
 	
 	
 	

@@ -223,17 +223,17 @@ public class ProposalResource {
 		
 		Progress startProgress = new Progress();
 		startProgress.setContentTask("Tạo mới");
-		progressStages.add(new ProgressStage(Long.valueOf(0), null, null, null, startProgress));
+		progressStages.add(new ProgressStage(Long.valueOf(0), null, null, null, startProgress,"Khởi tạo"));
 		
 		for(ProgessDetaill progessDetaill : progessDetaills) {
-			progressStages.add(new ProgressStage(progessDetaill.getId(), progessDetaill.getStartDate(), progessDetaill.getEndDate(), progessDetaill.getLastModifiedBy(), progessDetaill.getProgress()));
+			progressStages.add(new ProgressStage(progessDetaill.getId(), progessDetaill.getStartDate(), progessDetaill.getEndDate(), progessDetaill.getLastModifiedBy(), progessDetaill.getProgress(),progessDetaill.getNote()));
 		}
 		
 		Progress completeProgress = new Progress();
 		completeProgress.setContentTask("Hoàn thành");
 		
 		
-		progressStages.add(new ProgressStage(Long.valueOf(8), null, proposalService.findOne(id).get().getEndDate(), null, completeProgress));
+		progressStages.add(new ProgressStage(Long.valueOf(8), null, proposalService.findOne(id).get().getEndDate(), null, completeProgress, "hoàn thành"));
 		
 		return progressStages;
 	}

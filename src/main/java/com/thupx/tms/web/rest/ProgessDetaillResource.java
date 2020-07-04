@@ -1,6 +1,7 @@
 package com.thupx.tms.web.rest;
 
 import com.thupx.tms.service.ProgessDetaillService;
+import com.thupx.tms.service.ProposalService;
 import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.ProgessDetaillDTO;
 
@@ -71,6 +72,12 @@ public class ProgessDetaillResource {
         if (progessDetaillDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        ProgessDetaillDTO dto = progessDetaillService.findOne(progessDetaillDTO.getId()).get();
+        
+        progessDetaillDTO.setProgressId(dto.getProgressId());
+        
+        progessDetaillDTO.setProposalId(dto.getProposalId());
+        
         ProgessDetaillDTO result = progessDetaillService.save(progessDetaillDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, progessDetaillDTO.getId().toString()))
