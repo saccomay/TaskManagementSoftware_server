@@ -33,6 +33,9 @@
             <column name="additional_day" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="remaining_date" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="hospital_department_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -70,6 +73,7 @@
             <column name="status" type="boolean"/>
             <column name="note" type="string"/>
             <column name="additional_day" type="numeric"/>
+            <column name="remaining_date" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

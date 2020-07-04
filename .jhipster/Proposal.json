@@ -41,6 +41,10 @@
     {
       "fieldName": "additionalDay",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "remainingDate",
+      "fieldType": "Integer"
     }
   ],
   "changelogDate": "20200531120122",
