@@ -52,6 +52,12 @@ public class ProposalResourceIT {
     private static final String DEFAULT_NOTE = "AAAAAAAAAA";
     private static final String UPDATED_NOTE = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_REMAINING_DATE = 1;
+    private static final Integer UPDATED_REMAINING_DATE = 2;
+
+    private static final Integer DEFAULT_ADDITIONAL_DATE = 1;
+    private static final Integer UPDATED_ADDITIONAL_DATE = 2;
+
     @Autowired
     private ProposalRepository proposalRepository;
 
@@ -81,7 +87,9 @@ public class ProposalResourceIT {
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
             .status(DEFAULT_STATUS)
-            .note(DEFAULT_NOTE);
+            .note(DEFAULT_NOTE)
+            .remainingDate(DEFAULT_REMAINING_DATE)
+            .additionalDate(DEFAULT_ADDITIONAL_DATE);
         return proposal;
     }
     /**
@@ -96,7 +104,9 @@ public class ProposalResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .status(UPDATED_STATUS)
-            .note(UPDATED_NOTE);
+            .note(UPDATED_NOTE)
+            .remainingDate(UPDATED_REMAINING_DATE)
+            .additionalDate(UPDATED_ADDITIONAL_DATE);
         return proposal;
     }
 
@@ -125,6 +135,8 @@ public class ProposalResourceIT {
         assertThat(testProposal.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testProposal.isStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testProposal.getNote()).isEqualTo(DEFAULT_NOTE);
+        assertThat(testProposal.getRemainingDate()).isEqualTo(DEFAULT_REMAINING_DATE);
+        assertThat(testProposal.getAdditionalDate()).isEqualTo(DEFAULT_ADDITIONAL_DATE);
     }
 
     @Test
@@ -163,7 +175,9 @@ public class ProposalResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(sameInstant(DEFAULT_END_DATE))))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())))
-            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE)));
+            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE)))
+            .andExpect(jsonPath("$.[*].remainingDate").value(hasItem(DEFAULT_REMAINING_DATE)))
+            .andExpect(jsonPath("$.[*].additionalDate").value(hasItem(DEFAULT_ADDITIONAL_DATE)));
     }
     
     @Test
@@ -181,7 +195,9 @@ public class ProposalResourceIT {
             .andExpect(jsonPath("$.startDate").value(sameInstant(DEFAULT_START_DATE)))
             .andExpect(jsonPath("$.endDate").value(sameInstant(DEFAULT_END_DATE)))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()))
-            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE));
+            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE))
+            .andExpect(jsonPath("$.remainingDate").value(DEFAULT_REMAINING_DATE))
+            .andExpect(jsonPath("$.additionalDate").value(DEFAULT_ADDITIONAL_DATE));
     }
     @Test
     @Transactional
@@ -208,7 +224,9 @@ public class ProposalResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .status(UPDATED_STATUS)
-            .note(UPDATED_NOTE);
+            .note(UPDATED_NOTE)
+            .remainingDate(UPDATED_REMAINING_DATE)
+            .additionalDate(UPDATED_ADDITIONAL_DATE);
         ProposalDTO proposalDTO = proposalMapper.toDto(updatedProposal);
 
         restProposalMockMvc.perform(put("/api/proposals")
@@ -225,6 +243,8 @@ public class ProposalResourceIT {
         assertThat(testProposal.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testProposal.isStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testProposal.getNote()).isEqualTo(UPDATED_NOTE);
+        assertThat(testProposal.getRemainingDate()).isEqualTo(UPDATED_REMAINING_DATE);
+        assertThat(testProposal.getAdditionalDate()).isEqualTo(UPDATED_ADDITIONAL_DATE);
     }
 
     @Test

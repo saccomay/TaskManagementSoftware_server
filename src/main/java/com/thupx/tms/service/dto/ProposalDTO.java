@@ -20,6 +20,10 @@ public class ProposalDTO implements Serializable {
 
     private String note;
 
+    private Integer remainingDate;
+
+    private Integer additionalDate;
+
 
     private Long hospitalDepartmentId;
 
@@ -73,6 +77,22 @@ public class ProposalDTO implements Serializable {
         this.note = note;
     }
 
+    public Integer getRemainingDate() {
+        return remainingDate;
+    }
+
+    public void setRemainingDate(Integer remainingDate) {
+        this.remainingDate = remainingDate;
+    }
+
+    public Integer getAdditionalDate() {
+        return additionalDate;
+    }
+
+    public void setAdditionalDate(Integer additionalDate) {
+        this.additionalDate = additionalDate;
+    }
+
     public Long getHospitalDepartmentId() {
         return hospitalDepartmentId;
     }
@@ -116,6 +136,8 @@ public class ProposalDTO implements Serializable {
             ", endDate='" + getEndDate() + "'" +
             ", status='" + isStatus() + "'" +
             ", note='" + getNote() + "'" +
+            ", remainingDate=" + getRemainingDate() +
+            ", additionalDate=" + getAdditionalDate() +
             ", hospitalDepartmentId=" + getHospitalDepartmentId() +
             ", userExtraId=" + getUserExtraId() +
             "}";

@@ -36,6 +36,12 @@ public class Proposal implements Serializable {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "remaining_date")
+    private Integer remainingDate;
+
+    @Column(name = "additional_date")
+    private Integer additionalDate;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "proposals", allowSetters = true)
     private HospitalDepartment hospitalDepartment;
@@ -118,6 +124,32 @@ public class Proposal implements Serializable {
         this.note = note;
     }
 
+    public Integer getRemainingDate() {
+        return remainingDate;
+    }
+
+    public Proposal remainingDate(Integer remainingDate) {
+        this.remainingDate = remainingDate;
+        return this;
+    }
+
+    public void setRemainingDate(Integer remainingDate) {
+        this.remainingDate = remainingDate;
+    }
+
+    public Integer getAdditionalDate() {
+        return additionalDate;
+    }
+
+    public Proposal additionalDate(Integer additionalDate) {
+        this.additionalDate = additionalDate;
+        return this;
+    }
+
+    public void setAdditionalDate(Integer additionalDate) {
+        this.additionalDate = additionalDate;
+    }
+
     public HospitalDepartment getHospitalDepartment() {
         return hospitalDepartment;
     }
@@ -171,6 +203,8 @@ public class Proposal implements Serializable {
             ", endDate='" + getEndDate() + "'" +
             ", status='" + isStatus() + "'" +
             ", note='" + getNote() + "'" +
+            ", remainingDate=" + getRemainingDate() +
+            ", additionalDate=" + getAdditionalDate() +
             "}";
     }
 }
