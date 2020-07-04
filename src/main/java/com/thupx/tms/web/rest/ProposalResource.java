@@ -166,8 +166,21 @@ public class ProposalResource {
 	@GetMapping("/proposals-data-table")
 	public List<ProposalData2> getAllProposalsDataTable() {
 		log.debug("REST request to get all Proposals-table");
+		
+		long countDays = 0;
+		
+		List<ProgressDTO> progressDTOs = progressService.findAll(); 
+		
+		for (ProgressDTO progressDTO : progressDTOs) {
+			countDays = countDays + progressDTO.getLimit();
+		}
+		
+		
+		
 		List<Proposal> proposals = proposalService.findAll();
 		List<ProposalData2> proposalDatas = new ArrayList<>();
+		
+		List<ProgressDTO> progesses = progressService.findAll();
 		
 		int group = userService.checkAdmin();
 		
@@ -177,7 +190,9 @@ public class ProposalResource {
 		if (group == 0) {
 			for (Proposal proposal : proposals) {
 				ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
-				proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask()));
+				proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
+						currentDetaill.getProgress().getContentTask(),
+						proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDay())));
 			}
 			return proposalDatas;
 		}
@@ -190,7 +205,8 @@ public class ProposalResource {
 				for(UserExtra userExtra : userExtras) {
 					if(proposal.getUserExtra().getId().equals(userExtra.getId())) {
 						ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
-						proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask()));
+						proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask(),
+								proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDay())));
 					}
 				}
 				
@@ -206,7 +222,8 @@ public class ProposalResource {
 		for (Proposal proposal : proposals) {
 				if(proposal.getUserExtra().getId().equals(extra.getId())) {
 					ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
-					proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask()));
+					proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask(),
+							proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDay())));
 				}						
 		}
 		
