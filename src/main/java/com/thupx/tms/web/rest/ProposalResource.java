@@ -286,6 +286,29 @@ public class ProposalResource {
 		
 		return progressStages;
 	}
+	
+	
+	@PutMapping("/update-All-ProgressDetail-By-ProposalId")
+	public List<ProgessDetaillDTO> updateAllProgressDetailByProposalId(@RequestBody List<ProgressStage> progressStages, @RequestParam Long proposalId){
+		log.debug("REST request to update-All-ProgressDetail-By-ProposalId");
+		
+		List<ProgessDetaillDTO> detaillDTOs = new ArrayList<>();
+		
+		for(ProgressStage progressStage : progressStages) {
+			if(!progressStage.getId().equals(new Long(0)) && !progressStage.getId().equals(new Long(8))) {
+			ProgessDetaillDTO detaillDTO = new ProgessDetaillDTO();
+			detaillDTO.setId(progressStage.getId());
+			detaillDTO.setProgressId(progressStage.getProgress().getId());
+			detaillDTO.setProposalId(proposalId);
+			detaillDTO.setNote(progressStage.getNote());
+			detaillDTO.setStartDate(progressStage.getTimeStart());
+			detaillDTO.setEndDate(progressStage.getTimeEnd());
+			detaillDTOs.add(detaillDTO);
+			progessDetaillService.save(detaillDTO);	
+			}
+		}		
+		return detaillDTOs;
+	}
 
 	/**
 	 * {@code GET  /proposals/:id} : get the "id" proposal.

@@ -10,6 +10,13 @@ public class ProgressStage implements Serializable {
 	private String performBy;
 	private Progress progress;
 	private String note;
+	
+	
+	
+	public ProgressStage() {
+		super();
+	}
+
 	public ProgressStage(Long id, ZonedDateTime timeStart, ZonedDateTime timeEnd, String performBy, Progress progress, String note) {
 		super();
 		this.id = id;
