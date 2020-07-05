@@ -16,12 +16,14 @@ import com.thupx.tms.web.rest.errors.BadRequestAlertException;
 import com.thupx.tms.service.dto.ProgessDetaillDTO;
 import com.thupx.tms.service.dto.ProgressDTO;
 import com.thupx.tms.service.dto.ProposalDTO;
+import com.thupx.tms.service.dto.UserExtraDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,17 +77,41 @@ public class ProposalResource {
 	 * @throws URISyntaxException if the Location URI syntax is incorrect.
 	 */
 	@PostMapping("/proposals")
-	public ResponseEntity<ProposalDTO> createProposal(@RequestBody ProposalDTO proposalDTO) throws URISyntaxException {
+	public ResponseEntity<?> createProposal(@RequestBody ProposalDTO proposalDTO) throws URISyntaxException {
 		log.debug("REST request to save Proposal : {}", proposalDTO);
 		if (proposalDTO.getId() != null) {
 			throw new BadRequestAlertException("A new proposal cannot already have an ID", ENTITY_NAME, "idexists");
 		}
 		
+//		boolean checkUserExtra = false;
+//		List<UserExtra> userExtras = extraRepository.findAll();
+//		
+//		for (UserExtra userExtra : userExtras) {
+//			if(userExtra.getId().equals(proposalDTO.getUserExtraId())) {
+//				checkUserExtra = true;
+//			}
+//		}
+//		
+//		
+//		if (checkUserExtra == false) {
+//			System.out.println("User with id " + proposalDTO.getUserExtraId() + " not found");
+//			ResponseUtil.wrapOrNotFound();
+//		}
+		
+		Optional<UserExtra> userExtra = extraRepository.findById(proposalDTO.getUserExtraId());
+		if (userExtra.isEmpty()) {
+			 return new ResponseEntity<>(
+			          "User ID not found", 
+			          HttpStatus.BAD_REQUEST);
+		}
+		
+		
 		ZonedDateTime time = ZonedDateTime.now();
 		
 		//proposalDTO.setStartDate(time);
 		proposalDTO.setStatus(false);
-	    proposalDTO.setUserExtraId(userService.getUserid());
+		
+	    //proposalDTO.setUserExtraId(userService.getUserid());
 	    
 		
 		ProposalDTO result = proposalService.save(proposalDTO);
