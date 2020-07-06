@@ -175,7 +175,8 @@ public class ProposalResource {
 		List<ProgessDetaill> progessDetaills = progessDetaillService.findAllByProposalId(idProposal);
 
 		for (ProgessDetaill progessDetaill : progessDetaills) {
-			if (progessDetaill.getEndDate() == null) {
+			log.debug("issueeeeeeeeeeeeeeeeeeeeee", progessDetaill.getEndDate());
+			if (progessDetaill.getEndDate()==null) {
 				return progessDetaill;
 			}
 		}
@@ -186,7 +187,7 @@ public class ProposalResource {
 		log.debug("REST request to get current ProgessDetaillDTO : {}", idProposal);
 		List<ProgessDetaillDTO> progessDetaills = progessDetaillService.findAllDTOByProposalId(idProposal);
 
-		for (ProgessDetaillDTO progessDetaill : progessDetaills) {
+		for (ProgessDetaillDTO progessDetaill : progessDetaills) {			
 			if (progessDetaill.getEndDate() == null) {
 				return progessDetaill;
 			}
