@@ -295,6 +295,24 @@ public class ProposalResource {
 		
 		List<ProgessDetaillDTO> detaillDTOs = new ArrayList<>();
 		
+		for(int i = progressStages.size()-2; i > 0; i--) {
+				if(progressStages.get(i).getTimeStart() != null) {
+					for(ProgressStage progressStage1 : progressStages) {
+						if(!progressStages.get(i).getId().equals(new Long(0)) && !progressStages.get(i).getId().equals(new Long(8))) {
+							if(progressStage1.getId().equals(progressStages.get(i).getId())) {
+								break;
+							}
+							
+							if(progressStage1.getTimeStart() == null) {
+								progressStage1.setTimeStart(progressStages.get(i).getTimeStart());
+								progressStage1.setTimeEnd(progressStages.get(i).getTimeEnd());
+							}				
+						}
+					}
+					break;
+				}
+		}		
+		
 		for(ProgressStage progressStage : progressStages) {
 			if(!progressStage.getId().equals(new Long(0)) && !progressStage.getId().equals(new Long(8))) {
 			ProgessDetaillDTO detaillDTO = new ProgessDetaillDTO();

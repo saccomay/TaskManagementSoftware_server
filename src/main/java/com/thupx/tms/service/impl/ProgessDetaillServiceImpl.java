@@ -67,7 +67,7 @@ public class ProgessDetaillServiceImpl implements ProgessDetaillService {
     @Transactional(readOnly = true)
     public List<ProgessDetaill> findAllByProposalId(Long proposalId) {
         log.debug("Request to get all ProgessDetaills");
-        return progessDetaillRepository.findAllByProposalId(proposalId).stream()
+        return progessDetaillRepository.findAllByProposalIdOrderByIdAsc(proposalId).stream()
             .collect(Collectors.toCollection(LinkedList::new));
     }
     
@@ -75,7 +75,7 @@ public class ProgessDetaillServiceImpl implements ProgessDetaillService {
     @Transactional(readOnly = true)
     public List<ProgessDetaillDTO> findAllDTOByProposalId(Long proposalId) {
         log.debug("Request to get all ProgessDetaills");
-        return progessDetaillRepository.findAllByProposalId(proposalId).stream()
+        return progessDetaillRepository.findAllByProposalIdOrderByIdAsc(proposalId).stream()
         	.map(progessDetaillMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

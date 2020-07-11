@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProgessDetaillRepository extends JpaRepository<ProgessDetaill, Long> {
 	
-	List<ProgessDetaill> findAllByProposalId(Long id);
+	List<ProgessDetaill> findAllByProposalIdOrderByIdAsc(Long id);
 	
 	@Modifying
 	@Query("update ProgessDetaill u set u.endDate = ?1 where u.id = ?2")
