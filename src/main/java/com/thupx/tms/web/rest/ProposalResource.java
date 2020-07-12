@@ -271,19 +271,19 @@ public class ProposalResource {
 		List<ProgressStage> progressStages = new ArrayList<>();
 		
 		
-		Progress startProgress = new Progress();
-		startProgress.setContentTask("Tạo mới");
-		progressStages.add(new ProgressStage(Long.valueOf(0), null, null, null, startProgress,"Khởi tạo"));
+//		Progress startProgress = new Progress();
+//		startProgress.setContentTask("Tạo mới");
+//		progressStages.add(new ProgressStage(Long.valueOf(0), null, null, null, startProgress,"Khởi tạo"));
 		
 		for(ProgessDetaill progessDetaill : progessDetaills) {
 			progressStages.add(new ProgressStage(progessDetaill.getId(), progessDetaill.getStartDate(), progessDetaill.getEndDate(), progessDetaill.getLastModifiedBy(), progessDetaill.getProgress(),progessDetaill.getNote()));
 		}
 		
-		Progress completeProgress = new Progress();
-		completeProgress.setContentTask("Hoàn thành");
-		
-		
-		progressStages.add(new ProgressStage(Long.valueOf(8), null, proposalService.findOne(id).get().getEndDate(), null, completeProgress, "hoàn thành"));
+//		Progress completeProgress = new Progress();
+//		completeProgress.setContentTask("Hoàn thành");
+//		
+//		
+//		progressStages.add(new ProgressStage(Long.valueOf(8), null, proposalService.findOne(id).get().getEndDate(), null, completeProgress, "hoàn thành"));
 		
 		return progressStages;
 	}
@@ -295,26 +295,26 @@ public class ProposalResource {
 		
 		List<ProgessDetaillDTO> detaillDTOs = new ArrayList<>();
 		
-		for(int i = progressStages.size()-2; i > 0; i--) {
-				if(progressStages.get(i).getTimeStart() != null) {
-					for(ProgressStage progressStage1 : progressStages) {
-						if(!progressStages.get(i).getId().equals(new Long(0)) && !progressStages.get(i).getId().equals(new Long(8))) {
-							if(progressStage1.getId().equals(progressStages.get(i).getId())) {
-								break;
-							}
-							
-							if(progressStage1.getTimeStart() == null) {
-								progressStage1.setTimeStart(progressStages.get(i).getTimeStart());
-								progressStage1.setTimeEnd(progressStages.get(i).getTimeEnd());
-							}				
-						}
-					}
-					break;
-				}
-		}		
+//		for(int i = progressStages.size()-2; i > 0; i--) {
+//				if(progressStages.get(i).getTimeStart() != null) {
+//					for(ProgressStage progressStage1 : progressStages) {
+//						if(!progressStages.get(i).getId().equals(new Long(0)) && !progressStages.get(i).getId().equals(new Long(8))) {
+//							if(progressStage1.getId().equals(progressStages.get(i).getId())) {
+//								break;
+//							}
+//							
+//							if(progressStage1.getTimeStart() == null) {
+//								progressStage1.setTimeStart(progressStages.get(i).getTimeStart());
+//								progressStage1.setTimeEnd(progressStages.get(i).getTimeEnd());
+//							}				
+//						}
+//					}
+//					break;
+//				}
+//		}		
 		
 		for(ProgressStage progressStage : progressStages) {
-			if(!progressStage.getId().equals(new Long(0)) && !progressStage.getId().equals(new Long(8))) {
+//			if(!progressStage.getId().equals(new Long(0)) && !progressStage.getId().equals(new Long(8))) {
 			ProgessDetaillDTO detaillDTO = new ProgessDetaillDTO();
 			detaillDTO.setId(progressStage.getId());
 			detaillDTO.setProgressId(progressStage.getProgress().getId());
@@ -324,8 +324,15 @@ public class ProposalResource {
 			detaillDTO.setEndDate(progressStage.getTimeEnd());
 			detaillDTOs.add(detaillDTO);
 			progessDetaillService.save(detaillDTO);	
-			}
-		}		
+//			}
+		}	
+		
+		if(progressStages.get(progressStages.size() - 1).getTimeEnd() != null ) {
+			ProposalDTO proposalDTO = proposalService.findOne(proposalId).get();
+			proposalDTO.setStatus(true);
+			proposalService.save(proposalDTO);
+		}
+		
 		return detaillDTOs;
 	}
 
