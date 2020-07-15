@@ -343,6 +343,7 @@ public class ProposalResource {
 		
 		if(progressStages.get(progressStages.size() - 1).getTimeEnd() != null ) {
 			ProposalDTO proposalDTO = proposalService.findOne(proposalId).get();
+			proposalDTO.setEndDate(progressStages.get(progressStages.size() - 1).getTimeEnd());
 			proposalDTO.setStatus(true);
 			proposalService.save(proposalDTO);
 		}
