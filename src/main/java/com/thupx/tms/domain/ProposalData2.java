@@ -12,12 +12,13 @@ public class ProposalData2 implements Serializable {
 	private Integer remainingDate;
 	private ZonedDateTime deadLine;
 	
-	public ProposalData2(Proposal proposal, Long progressDetailId, String currentProgressName, ZonedDateTime deadLine) {
+	public ProposalData2(Proposal proposal, Long progressDetailId, String currentProgressName, ZonedDateTime deadLine, Integer remainingDate) {
 		super();
 		this.proposal = proposal;
 		this.progressDetailId = progressDetailId;
 		this.currentProgressName = currentProgressName;
-		this.remainingDate = calDeadLine(ZonedDateTime.now(), proposal.getStartDate(), ChronoUnit.DAYS);
+//		this.remainingDate = calDeadLine(ZonedDateTime.now(), proposal.getStartDate(), ChronoUnit.DAYS);
+		this.remainingDate = remainingDate;
 		this.deadLine = deadLine;
 	}
 	public Proposal getProposal() {
@@ -52,8 +53,8 @@ public class ProposalData2 implements Serializable {
 	}
 	
 	
-	private Integer calDeadLine(ZonedDateTime currentDate,ZonedDateTime createDateProposal,ChronoUnit unit) {
-		return (int) (long) unit.between(createDateProposal,currentDate);
-	}
+//	private Integer calDeadLine(ZonedDateTime currentDate,ZonedDateTime createDateProposal,ChronoUnit unit) {
+//		return (int) (long) unit.between(createDateProposal,currentDate);
+//	}
 	
 }

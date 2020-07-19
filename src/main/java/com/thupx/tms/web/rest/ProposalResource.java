@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -237,9 +238,16 @@ public class ProposalResource {
 		if (group == 0) {
 			for (Proposal proposal : proposals) {
 				ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
-				proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
-						currentDetaill.getProgress().getContentTask(),
-						proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate())));
+				if(proposal.isStatus()){
+					proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
+							currentDetaill.getProgress().getContentTask(),
+							proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate()),calRemainingDate(proposal.getEndDate(), proposal.getStartDate(), ChronoUnit.DAYS)));
+				}else{
+					proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
+							currentDetaill.getProgress().getContentTask(),
+							proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate()),calRemainingDate(ZonedDateTime.now(), proposal.getStartDate(), ChronoUnit.DAYS)));
+				}
+								
 			}
 			return proposalDatas;
 		}
@@ -252,8 +260,15 @@ public class ProposalResource {
 				for(UserExtra userExtra : userExtras) {
 					if(proposal.getUserExtra().getId().equals(userExtra.getId())) {
 						ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
-						proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask(),
-								proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate())));
+						if(proposal.isStatus()){
+							proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
+									currentDetaill.getProgress().getContentTask(),
+									proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate()),calRemainingDate(proposal.getEndDate(), proposal.getStartDate(), ChronoUnit.DAYS)));
+						}else{
+							proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
+									currentDetaill.getProgress().getContentTask(),
+									proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate()),calRemainingDate(ZonedDateTime.now(), proposal.getStartDate(), ChronoUnit.DAYS)));
+						}
 					}
 				}
 				
@@ -269,8 +284,15 @@ public class ProposalResource {
 		for (Proposal proposal : proposals) {
 				if(proposal.getUserExtra().getId().equals(extra.getId())) {
 					ProgessDetaill currentDetaill = getCurrentProgessDetaill(proposal.getId());
-					proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),currentDetaill.getProgress().getContentTask(),
-							proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate())));
+					if(proposal.isStatus()){
+						proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
+								currentDetaill.getProgress().getContentTask(),
+								proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate()),calRemainingDate(proposal.getEndDate(), proposal.getStartDate(), ChronoUnit.DAYS)));
+					}else{
+						proposalDatas.add(new ProposalData2(proposal,currentDetaill.getId(),
+								currentDetaill.getProgress().getContentTask(),
+								proposal.getStartDate().plusDays(countDays+proposal.getAdditionalDate()),calRemainingDate(ZonedDateTime.now(), proposal.getStartDate(), ChronoUnit.DAYS)));
+					}
 				}						
 		}
 		
@@ -386,4 +408,8 @@ public class ProposalResource {
 				.headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
 				.build();
 	}
+	
+	private Integer calRemainingDate(ZonedDateTime currentDate,ZonedDateTime createDateProposal,ChronoUnit unit) {
+	return (int) (long) unit.between(createDateProposal,currentDate);
+}
 }
